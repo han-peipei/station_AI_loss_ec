@@ -22,7 +22,7 @@ from data_3_B import standardize
 import random
 torch.backends.cuda.matmul.allow_tf32 = False
 torch.backends.cudnn.allow_tf32 = False
-out_dir = "/kaggle/working/station_AI_loss9/"
+out_dir = "/kaggle/working/station_AI_loss10/"
 os.makedirs(out_dir, exist_ok=True)
 ##########################################################################################
 def stitch_overlapping_forecasts(y_windows):
@@ -526,7 +526,7 @@ def train_and_evaluate_from_npy(
             [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
             device=y_true_phys.device,dtype=y_true_phys.dtype)
             weights = torch.tensor(
-            [1.0, 1.0, 1.2, 1.5, 8.0, 22.0, 22.0, 22.0, 18.0, 16.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+            [1.0, 1.0, 1.2, 6.0, 8.0, 22.0, 22.0, 22.0, 20.0, 18.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
             idx = torch.bucketize(y_true_phys, bins)
             w = weights[idx]
             # 分段加权 L1
@@ -563,7 +563,7 @@ def train_and_evaluate_from_npy(
                 [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
                 device=y_true_phys.device,dtype=y_true_phys.dtype)
                 weights = torch.tensor(
-                [1.0, 1.0, 1.2, 1.5, 8.0, 22.0, 22.0, 22.0, 18.0, 16.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+                [1.0, 1.0, 1.2, 6.0, 8.0, 22.0, 22.0, 22.0, 20.0, 18.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
                 idx = torch.bucketize(y_true_phys, bins)
                 w = weights[idx]
                 err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
