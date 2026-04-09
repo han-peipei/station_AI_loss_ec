@@ -151,7 +151,8 @@ def plot_pdf_1d(y_true_windows,y_pred_windows):
     y_true, _ = stitch_overlapping_forecasts(y_true_windows)
     y_pred, cnt = stitch_overlapping_forecasts(y_pred_windows)
 
-    bins2 = np.arange(0, 28, 2)  # [0,1,2,...,14]
+    # bins2 = np.arange(0, 28, 2)  # [0,1,2,...,14]
+    bins2=[1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5]
     labels = get_bins_interval(bins2)
 
     fig, ax = plt.subplots(figsize=(10,4), dpi=120)
