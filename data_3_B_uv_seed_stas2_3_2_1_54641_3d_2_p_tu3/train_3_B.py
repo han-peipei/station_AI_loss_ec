@@ -470,7 +470,7 @@ def train_and_evaluate_from_npy(
             torch.tensor(y_train).float(),       # [B, F]
         ),
         batch_size=32, shuffle=True,
-        generator=g, worker_init_fn=_worker_init_fn, num_workers=0,pin_memory=pin,
+        generator=g, worker_init_fn=_worker_init_fn, num_workers=0,pin_memory=pin, drop_last=True
     )
     val_loader = DataLoader(
         TensorDataset(
@@ -479,7 +479,7 @@ def train_and_evaluate_from_npy(
             torch.tensor(coords_va_norm).float(),
             torch.tensor(y_val).float(),
         ),
-        batch_size=32, shuffle=False, num_workers=0,pin_memory=pin,
+        batch_size=32, shuffle=False, num_workers=0,pin_memory=pin, drop_last=True
     )
 
     # ===== 3) 建模 =====
