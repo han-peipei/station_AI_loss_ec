@@ -469,7 +469,7 @@ def train_and_evaluate_from_npy(
             torch.tensor(coords_tr_norm).float(),    # [B, d]
             torch.tensor(y_train).float(),       # [B, F]
         ),
-        batch_size=batch_size, shuffle=True,
+        batch_size=32, shuffle=True,
         generator=g, worker_init_fn=_worker_init_fn, num_workers=0,pin_memory=pin,
     )
     val_loader = DataLoader(
@@ -479,7 +479,7 @@ def train_and_evaluate_from_npy(
             torch.tensor(coords_va_norm).float(),
             torch.tensor(y_val).float(),
         ),
-        batch_size=batch_size, shuffle=False, num_workers=0,pin_memory=pin,
+        batch_size=32, shuffle=False, num_workers=0,pin_memory=pin,
     )
 
     # ===== 3) 建模 =====
@@ -514,10 +514,10 @@ def train_and_evaluate_from_npy(
             hist_b, nwp_b, coord_b, y_b = hist_b.to(device), nwp_b.to(device), coord_b.to(device), y_b.to(device)
             y_b = y_b.squeeze(-1) 
             out = model(coord_b, hist_b, nwp_b)
-            print("y_std_t.shape =", y_std_t.shape if torch.is_tensor(y_std_t) else type(y_std_t))
-            print("y_mean_t.shape =", y_mean_t.shape if torch.is_tensor(y_mean_t) else type(y_mean_t))
-            print("y_b.shape =", y_b.shape)
-            print("out.shape =", out.shape)
+            # print("y_std_t.shape =", y_std_t.shape if torch.is_tensor(y_std_t) else type(y_std_t))
+            # print("y_mean_t.shape =", y_mean_t.shape if torch.is_tensor(y_mean_t) else type(y_mean_t))
+            # print("y_b.shape =", y_b.shape)
+            # print("out.shape =", out.shape)
             y_true_phys = y_b * y_std_t + y_mean_t   # [B, F]，单位 m/s
             y_pred_phys = out * y_std_t + y_mean_t
             # 分段权重（你可以自己调）
