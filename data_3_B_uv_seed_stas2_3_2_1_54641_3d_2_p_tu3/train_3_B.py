@@ -516,6 +516,7 @@ def train_and_evaluate_from_npy(
             out = model(coord_b, hist_b, nwp_b)
             
             y_true_phys = y_b * y_std_t + y_mean_t   # [B, F]，单位 m/s
+            y_pred_phys = out * y_std_t + y_mean_t
             # 分段权重（你可以自己调）
             w = torch.ones_like(y_true_phys)
             # w = torch.where(y_true_phys >= 6.0,  torch.full_like(w, 1.5), w)
@@ -535,14 +536,15 @@ def train_and_evaluate_from_npy(
             # loss = (w * err).sum() / (w.sum() + 1e-8)
             # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
             # loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+            err = torch.abs(y_pred_phys - y_true_phys)
             under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
             asym = torch.where(
                 under_mask,
-                torch.tensor(1.5, device=y_true_phys.device, dtype=y_true_phys.dtype),
-                torch.tensor(1.0, device=y_true_phys.device, dtype=y_true_phys.dtype)
+                torch.full_like(err, 1.5),
+                torch.ones_like(err)
             )
             
-            loss = (w * asym * err).mean()
+            loss = (w * asym * err).sum() / (w * asym).sum().clamp_min(1e-8)
               
             # loss = criterion(out, y_b)
             optimizer.zero_grad()
@@ -577,14 +579,15 @@ def train_and_evaluate_from_npy(
                 w = weights[idx]
                 # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
                 # loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+                err = torch.abs(y_pred_phys - y_true_phys)
                 under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
                 asym = torch.where(
                     under_mask,
-                    torch.tensor(1.5, device=y_true_phys.device, dtype=y_true_phys.dtype),
-                    torch.tensor(1.0, device=y_true_phys.device, dtype=y_true_phys.dtype)
+                    torch.full_like(err, 1.5),
+                    torch.ones_like(err)
                 )
                 
-                loss = (w * asym * err).mean()
+                loss = (w * asym * err).sum() / (w * asym).sum().clamp_min(1e-8)
                 
                 # loss = criterion(out, y_b)
                 totv += loss.item()
