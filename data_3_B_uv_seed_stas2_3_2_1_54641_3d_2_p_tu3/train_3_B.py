@@ -533,8 +533,16 @@ def train_and_evaluate_from_npy(
             # 分段加权 L1
             # err = torch.abs(out - y_b)              
             # loss = (w * err).sum() / (w.sum() + 1e-8)
-            err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
-            loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+            # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
+            # loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+            under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
+            asym = torch.where(
+                under_mask,
+                torch.tensor(1.5, device=y_true_phys.device, dtype=y_true_phys.dtype),
+                torch.tensor(1.0, device=y_true_phys.device, dtype=y_true_phys.dtype)
+            )
+            
+            loss = (w * asym * err).mean()
               
             # loss = criterion(out, y_b)
             optimizer.zero_grad()
@@ -567,8 +575,16 @@ def train_and_evaluate_from_npy(
                 [1.0, 1.0, 1.0, 1.0, 2.8, 4.8, 6.2, 7.2, 8.5, 10.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
                 idx = torch.bucketize(y_true_phys, bins)
                 w = weights[idx]
-                err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
-                loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+                # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
+                # loss = (w * err_phys).sum() / (w.sum() + 1e-8)
+                under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
+                asym = torch.where(
+                    under_mask,
+                    torch.tensor(1.5, device=y_true_phys.device, dtype=y_true_phys.dtype),
+                    torch.tensor(1.0, device=y_true_phys.device, dtype=y_true_phys.dtype)
+                )
+                
+                loss = (w * asym * err).mean()
                 
                 # loss = criterion(out, y_b)
                 totv += loss.item()
