@@ -531,7 +531,7 @@ def train_and_evaluate_from_npy(
             [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
             device=y_true_phys.device,dtype=y_true_phys.dtype)
             weights = torch.tensor(
-            [1.0, 1.0, 1.0, 1.0, 2.8, 4.8, 6.2, 7.2, 8.5, 10.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+             [1.0, 1.0, 1.0, 1.0, 2.2, 3.8, 5.2, 6.5, 7.8, 9.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
             idx = torch.bucketize(y_true_phys, bins)
             w = weights[idx]
             # 分段加权 L1
@@ -543,7 +543,7 @@ def train_and_evaluate_from_npy(
             under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
             asym = torch.where(
                 under_mask,
-                torch.full_like(err, 1.5),
+                torch.full_like(err, 1.25),
                 torch.ones_like(err)
             )
             
@@ -577,7 +577,7 @@ def train_and_evaluate_from_npy(
                 [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
                 device=y_true_phys.device,dtype=y_true_phys.dtype)
                 weights = torch.tensor(
-                [1.0, 1.0, 1.0, 1.0, 2.8, 4.8, 6.2, 7.2, 8.5, 10.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+                 [1.0, 1.0, 1.0, 1.0, 2.2, 3.8, 5.2, 6.5, 7.8, 9.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
                 idx = torch.bucketize(y_true_phys, bins)
                 w = weights[idx]
                 # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
@@ -586,7 +586,7 @@ def train_and_evaluate_from_npy(
                 under_mask = (y_true_phys >= 8.0) & (y_pred_phys < y_true_phys)
                 asym = torch.where(
                     under_mask,
-                    torch.full_like(err, 1.5),
+                    torch.full_like(err, 1.25),
                     torch.ones_like(err)
                 )
                 
