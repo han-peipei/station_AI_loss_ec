@@ -514,9 +514,8 @@ def train_and_evaluate_from_npy(
             hist_b, nwp_b, coord_b, y_b = hist_b.to(device), nwp_b.to(device), coord_b.to(device), y_b.to(device)
             y_b = y_b.squeeze(-1) 
             out = model(coord_b, hist_b, nwp_b)
-            print("hist_b.shape =", hist_b.shape)
-            print("nwp_b.shape  =", nwp_b.shape)
-            print("coord_b.shape =", coord_b.shape)
+            print("y_std_t.shape =", y_std_t.shape if torch.is_tensor(y_std_t) else type(y_std_t))
+            print("y_mean_t.shape =", y_mean_t.shape if torch.is_tensor(y_mean_t) else type(y_mean_t))
             print("y_b.shape =", y_b.shape)
             print("out.shape =", out.shape)
             y_true_phys = y_b * y_std_t + y_mean_t   # [B, F]，单位 m/s
