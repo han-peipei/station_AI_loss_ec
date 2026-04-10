@@ -514,7 +514,11 @@ def train_and_evaluate_from_npy(
             hist_b, nwp_b, coord_b, y_b = hist_b.to(device), nwp_b.to(device), coord_b.to(device), y_b.to(device)
             y_b = y_b.squeeze(-1) 
             out = model(coord_b, hist_b, nwp_b)
-            
+            print("hist_b.shape =", hist_b.shape)
+            print("nwp_b.shape  =", nwp_b.shape)
+            print("coord_b.shape =", coord_b.shape)
+            print("y_b.shape =", y_b.shape)
+            print("out.shape =", out.shape)
             y_true_phys = y_b * y_std_t + y_mean_t   # [B, F]，单位 m/s
             y_pred_phys = out * y_std_t + y_mean_t
             # 分段权重（你可以自己调）
