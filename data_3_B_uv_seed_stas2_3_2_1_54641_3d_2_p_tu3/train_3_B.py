@@ -531,7 +531,7 @@ def train_and_evaluate_from_npy(
             [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
             device=y_true_phys.device,dtype=y_true_phys.dtype)
             weights = torch.tensor(
-             [1.0, 1.0, 1.0, 1.0, 12, 16.4, 18.2, 20.5, 21.8, 22.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+             [1.0, 1.0, 1.0, 1.0, 12, 20.4, 22.2, 24.5, 25.8, 26.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
             idx = torch.bucketize(y_true_phys, bins)
             w = weights[idx]
             # 分段加权 L1
@@ -577,7 +577,7 @@ def train_and_evaluate_from_npy(
                 [1.6, 3.4, 5.5, 8.0, 10.8, 13.9, 17.2, 20.8, 24.5],
                 device=y_true_phys.device,dtype=y_true_phys.dtype)
                 weights = torch.tensor(
-                [1.0, 1.0, 1.0, 1.0, 12, 16.4, 18.2, 20.5, 21.8, 22.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
+                 [1.0, 1.0, 1.0, 1.0, 12, 20.4, 22.2, 24.5, 25.8, 26.0],device=y_true_phys.device,dtype=y_true_phys.dtype)
                 idx = torch.bucketize(y_true_phys, bins)
                 w = weights[idx]
                 # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
