@@ -78,8 +78,8 @@ hist_train, nwp_train, y_train = [], [], []
 hist_val,   nwp_val,   y_val   = [], [], []
 meta_tr, meta_va = [], []  
 
-Hhist = 24   # 历史窗口长度（上一个24小时）
-F     = 24   # 预测窗口长度（下一个24小时）
+Hhist = 8   # 历史窗口长度（上一个24小时）
+F     = 8   # 预测窗口长度（下一个24小时）
 S     = 1 
 for split in ("train", "val"):
     for station in stations:
