@@ -540,10 +540,10 @@ def train_and_evaluate_from_npy(
             # err_phys = torch.abs((out - y_b) * y_std_t)   # 误差单位 m/s
             # loss = (w * err_phys).sum() / (w.sum() + 1e-8)
             err = torch.abs(y_pred_phys - y_true_phys)
-            under_mask = (y_true_phys >= 10.0) & (y_pred_phys < y_true_phys)
+            under_mask = (y_true_phys >= 10.8) & (y_pred_phys < y_true_phys)
             asym = torch.where(
                 under_mask,
-                torch.full_like(err, 6.5),
+                torch.full_like(err, 8.5),
                 torch.ones_like(err)
             )
             
